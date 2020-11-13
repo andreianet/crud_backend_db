@@ -34,11 +34,9 @@ const contatosSchema = new Schema({
 const contatoCollections = mongoose.model('contatos', contatosSchema); 
 
 module.exports = contatoCollections
-
-
 /*
 {
     collection: "contatos",
-    versionKey: false //apenas para versionar
+    versionKey: false //apenas para versionar, não é obrigatório
 }
 */

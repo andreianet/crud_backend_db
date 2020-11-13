@@ -2,13 +2,29 @@ const express = require('express')
 const router = express.Router()
 const controller = require('../controller/contatosController')
 
-router.get('/', controller.getAllContatos)
+//@Description: Get 
+router.get('/', controller.getAllContacts)
+
+//@Description: Post - Criar novos contacts
 router.post('/criar', controller.addContato)
-router.get('/:nome', controller.getContatoNome)
+
+//@Description: Get - Search name
+router.get('/:nome', controller.getContactName)
+
+//@Description: Get - Buscar pelo ID
+//@param: id
 router.get('/id/:id', controller.getContatoById)
 
-router.patch('/atualizar/:id', controller.patchContatos)
+//@Description: Put - Update pelo ID 
+//@param: id
+router.put('/atualizar/:id', controller.upContatos)
 
-router.put('/atualizar/:id', controller.phoneUpdate)
+//@Description: Put - Update por completo 
+//@param: id
+router.put('/atualizar/telefone/:id', controller.phoneUpdate)
+
+//@description: Delete - Deletar contato por ID
+//@param: id
+router.delete('/deletar/:id', controller.deleteContatos)
 
 module.exports = router

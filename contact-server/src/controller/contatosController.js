@@ -1,27 +1,22 @@
-//Chama as funções que serão criadas nas ROTAS
-
+//Chamando as funções que serão criadas nas ROTAS
 const contatoCollections = require('../models/contatosSchema')
 
-const getAllContatos = (req, res) => {
+const getAllContacts = (req, res) => {
     console.log(req.url);
 
-    contatoCollections.find((error, contatos) => {
+    contatoCollections.find((error, contacts) => {
         if (error) {
             return res.status(500).send(error)
         } else {
-            return res.status(200).json({
-                mensagem: "Tudo certo",
-                version: "1.0"
-            })
+            return res.status(200).send(contacts)
         }
     })
 }
 
-//@description: POST add
-const addContato = (req, res) => {
-    const contatoBody = req.body //usar o body que user digitou
 
-    const contato = new contatoCollections(contatoBody)
+const addContato = (req, res) => {
+    const contactsBody = req.body //o que user digitou 
+    const contato = new contatoCollections(contactsBody)
 
     contato.save((error) => {
         if (error) {
@@ -36,8 +31,8 @@ const addContato = (req, res) => {
     })
 }
 
-//@description Get contatos/nome
-const getContatoNome = (req, res) => {
+//Search Name
+const getContactName = (req, res) => {
     const nome = req.params.nome
 
     contatoCollections.find({
@@ -47,12 +42,11 @@ const getContatoNome = (req, res) => {
             return res.status(500).send(error)
         } else if (contatos == "") {
             return res.status(400).send({
-                messagem: "Get não encontrado!",
-                
+                messagem: "Name not found!",                
             })
         } else {
             return res.status(200).send({
-                messagem: "GET por NOME com Sucesso!",
+                messagem: "Nome encontrado com Sucesso!",
                 contatos
             });
         }
@@ -60,8 +54,6 @@ const getContatoNome = (req, res) => {
 
 }
 
-//@description GET contatos/id
-//@host: http://localhost:3030/contatos/id/5fa6db437cb96b3858e47cfb
 const getContatoById = (req, res) => {
     const id = req.params.id
 
@@ -80,10 +72,8 @@ const getContatoById = (req, res) => {
     })
 }
 
-//@description PATCH 
-//UPDATE
-// /contatos/atualizar/[ID]" Atualiza completamente contato e retorna mensagem amigável (id não pode ser modificado)
-const patchContatos = (req, res) => {
+//Atualiza completamente contato e retorna mensagem amigável (id não pode ser modificado)
+const upContatos = (req, res) => {
     const idParam = req.params.id
     const contatosBody = req.body
     const novo = {new: true} //retorna valor modificado
@@ -104,37 +94,54 @@ const patchContatos = (req, res) => {
 
     )
 }
-//Atualiza somente telefone do contato por id específico e retorna mensagem amigável:
-//@description: PUT /contatos/atualizar/telefone[ID]
-const phoneUpdate = (req, res) => {
-    const id = req.params.id
-    const celular = req.params.celular
-    //const contatosBody = req.body
-    //const novo = {new: true} 
 
-    contatoCollections.findByIdAndUpdate(id, celular,(error, contatos) => {         
+//Atualiza somente telefone do contato por id específico e retorna mensagem amigável:
+const phoneUpdate = (req, res) => {
+    const id = req.params.id    
+    const contatosBody = req.body
+    const novo = {new: true} 
+
+    contatoCollections.findByIdAndUpdate(id,contatosBody,novo,(error, contatos) => {         
             if (error) {
                return res.status(500).send(error) 
             }else if (contatos){
                 return res.status(200).send({
-                    message: 'Telefone alterado!' //telefone vêm null - VERIFICAR
+                    message: 'TelePhone Update!',
+                    contatos 
                 })
             }else{
                 return res.status(404).send({
-                    message: 'Error... Verificar telefone', 
-                    contatos
+                    message: 'Error... Verificar TelePhone.' 
+                    
                 })
             }
     })
 }
 
-// /contatos/deletar/[ID]" Deleta contato por id específico e retorna mensagem amigável:
-
+//Deleta contato por id específico e retorna mensagem amigável:
+const deleteContatos = (req, res) => {
+    const id = req.params.id
+    contatoCollections.findByIdAndDelete(id,(error, contatos) =>{
+        if (error) {
+            return res.status(500).send({
+                message: 'Ocorreu algum Error, verificar!',
+                error
+            })
+        }else{
+            if (contatos) {
+                return res.status(200).send("Contact Deleted!!")
+            }else{
+                return res.status(404)
+            }
+        }
+    })
+}
 module.exports = {
-    getAllContatos,
+    getAllContacts,
     addContato,
-    getContatoNome,
+    getContactName,
     getContatoById,
-    patchContatos,
-    phoneUpdate
+    upContatos,
+    phoneUpdate,
+    deleteContatos
 }
