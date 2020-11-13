@@ -3,11 +3,11 @@
 
 # PROJETO AGENDA DE CONTATOS:
 Criar uma API Agenda para reunir contatos do nosso usuário.
-Tecnlogias/Linguagens utilizadas: Mongoose, Node.js, Express, Nodemon, Cors, JavaScript.
+Tecnologias/Linguagens utilizadas: Mongoose, Node.js, Express, Nodemon, Cors, JavaScript.
 
 # Campos da Collection CONTATOS:
 - id
-- nomen
+- nome
 - celular
 - dataNascimento
 - fotoPerfil
